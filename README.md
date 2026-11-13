@@ -78,7 +78,7 @@ all of these are `archive.<command>`, so `"cmd-s": "archive.toggle-space"` in ke
 
 the by-id ones don't care what's focused. use those in scripts, not the toggles. (the toggles act on whatever you're looking at, which is the point of a shortcut and the reason not to fire them from a test script at your real work. ask me how i know.)
 
-want it in a right-click menu? a menu item just runs `archive.archive-tab-<id>`. see `herdr-config` below for a working example.
+want it in a right-click menu? a menu item just runs `archive.archive-tab-<id>` (that's how it's wired in the author's setup).
 
 ## how it works
 
@@ -122,7 +122,7 @@ install.sh                install / uninstall
 
 ## the author's setup
 
-this came out of [yigitkonur/herdr-config](https://github.com/yigitkonur/herdr-config) (a whole customized herdr). that repo has a sidebar that lists archived items under the low priority space and a tab right-click menu with archive/restore wired to these commands, if you want a reference for the ui side.
+this came out of a fully customized herdr. there the sidebar lists archived items under the low priority space (it just reads the shared `archive.items` / `lowspace.ids` keys described above) and the tab right-click menu has archive / restore items. both are tiny: draw rows from shared state, call `archive.<command>` on click.
 
 ## license
 
