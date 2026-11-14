@@ -1,4 +1,4 @@
-// An archived project or tab, shown as the only pane of its tab in Low priority
+// An archived project or tab, shown as the only pane of its tab in the archive space
 // (spaces-color/archive.js makes it, props { id }). Nothing runs here: Restore starts its
 // terminals again in their folders and resumes each Claude conversation (Cmd+S does too).
 

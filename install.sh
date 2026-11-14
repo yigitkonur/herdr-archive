@@ -89,7 +89,7 @@ PY
 if [ "$cmd" = uninstall ]; then
   mkdir -p "$BACKUP/mods"
   for m in archive archived; do [ -d "$HOME_DIR/mods/$m" ] && { cp -R "$HOME_DIR/mods/$m" "$BACKUP/mods/"; rm -rf "$HOME_DIR/mods/$m"; }; done
-  echo "removed the mods (backup in $BACKUP). archived items still in Low priority stay until you restore or close them."
+  echo "removed the mods (backup in $BACKUP). archived items in the archive space stay until you restore or close them."
 else
   for m in archive archived; do herdr-app check "$HOME_DIR/mods/$m" 2>&1 | tail -1 || true; done
   echo "done. cmd+s archives the shown project, cmd+d the shown tab; on an archived item the same key restores it."

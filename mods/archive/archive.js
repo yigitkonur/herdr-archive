@@ -1,6 +1,6 @@
 // Archiving ends a project's terminals (or one tab's), so they stop using memory, and keeps
 // what they were: each terminal's folder, and for Claude Code the conversation it had. The
-// project then shows as a tab in its machine's "Low priority" space whose only pane is the
+// project then shows as a tab in its machine's archive space ("archived") whose only pane is the
 // `archived` mod: nothing runs there. Restoring starts a shell per terminal in the old space
 // and tab (the same ids, so its name, color, tab names and notes come back) and, where
 // Claude ran, resumes that conversation in it.
@@ -389,7 +389,7 @@ export async function restoreAll(lowId) {
   return done.filter(Boolean).join("\n");
 }
 
-// Low priority as it was before: archived terminals kept running there. Each group (one
+// The archive space as it was before: archived terminals kept running there. Each group (one
 // project, or a tab moved there by hand) becomes an item and its terminals end.
 export async function migrate(lowId) {
   const low = spaceOf(lowId);
