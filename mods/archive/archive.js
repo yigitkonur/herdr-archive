@@ -19,12 +19,12 @@ const pause = (s) => exec("sleep", [String(s)]);
 const hex = () => Array.from({ length: 32 }, () => "0123456789abcdef"[Math.floor(Math.random() * 16)]).join("");
 const base = (path) => (path ?? "").replace(/\/+$/, "").split("/").pop() || "~";
 
-// Each machine's Low priority space id (as the app shows it), "local" for this computer.
+// Each machine's archive space id (as the app shows it), "local" for this computer.
 export const lowIds = () => shared("lowspace.ids") ?? {};
 export const isLow = (spaceId) => Object.values(lowIds()).includes(spaceId);
 
 // Archived things: { id: { id, machine, at, space, name, named, color, whole, title, low, tabs } },
-// `low` the Low priority tab that shows it, `tabs` [{ tab, name, order, terms }], each term
+// `low` the archive tab that shows it, `tabs` [{ tab, name, order, terms }], each term
 // { cwd, argv, claude, session, addr? } (`addr`: the terminal a restore started for it).
 export const items = () => shared("archive.items") ?? {};
 export const itemOfTab = (tabId) => Object.values(items()).find((r) => r.low === tabId) ?? null;
@@ -214,9 +214,9 @@ async function start(m, space, tab, t) {
   return addr;
 }
 
-// --- the Low priority space and its items
+// --- the archive space and its items
 
-// The machine's Low priority space, made if missing. A space only exists around a tab, so a
+// The machine's archive space, made if missing. A space only exists around a tab, so a
 // placeholder terminal labelled into it makes it appear (and isn't selected, unlike space.new);
 // it's ended once an item is there, and removes itself.
 async function lowSpace(m) {
@@ -227,13 +227,13 @@ async function lowSpace(m) {
   setShared("lowspace.ids", { ...lowIds(), [key]: id });
   const r = await exec("hc", ["run", "--bg", "--json", "--no-parent", "--no-notify", "--rm", ...(m ? ["--on", m] : []),
     "--label", `herdr.space=${local(id)}`, "--label", `herdr.tab=tb${hex()}`, "sleep", "300"]);
-  if (r.code !== 0) throw new Error(`couldn't make the Low priority space: ${(r.stderr || r.stdout).trim()}`);
-  await until(() => Boolean(spaceOf(id)), "the Low priority space showing up");
+  if (r.code !== 0) throw new Error(`couldn't make the archive space: ${(r.stderr || r.stdout).trim()}`);
+  await until(() => Boolean(spaceOf(id)), "the archive space showing up");
   setShared("space.colors", { ...(shared("space.colors") ?? {}), [id]: LOW_COLOR });
   return { id, placeholder: JSON.parse(r.stdout).address };
 }
 
-// A tab in the Low priority space whose only pane shows `rec`. tab.new selects it.
+// A tab in the archive space whose only pane shows `rec`. tab.new selects it.
 async function addItem(lowId, rec) {
   const before = new Set(spaceOf(lowId)?.tabs.map((t) => t.id) ?? []);
   run("tab.new", { space: lowId, name: rec.title, mod: "archived", props: { id: rec.id } });
@@ -377,7 +377,7 @@ export function prune() {
   setShared("archive.items", keep);
 }
 
-// Every item in a Low priority space, in its tab order.
+// Every item in a archive space, in its tab order.
 export function itemsIn(lowId) {
   const all = Object.values(items());
   return (spaceOf(lowId)?.tabs ?? []).map((t) => all.find((r) => r.low === t.id)).filter(Boolean);

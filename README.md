@@ -114,7 +114,7 @@ install.sh                install / uninstall
 ## troubleshooting
 
 - **nothing happens on cmd+s**: `herdr-app status` should list a float called `archive`. if not, the layout block is missing (`./install.sh --layout yourlayout`). also check the key isn't bound to something else in `keys.json`
-- **"stopped: tN ended during the move"**: a terminal died while a move was in flight. whatever didn't move is still in its space or in low priority. restore from there
+- **"stopped: tN ended during the move"**: a terminal died while a move was in flight. whatever didn't move is still in its space or in the archive space. restore from there
 - **restore says "names or tab order didn't stick"**: herdr was still saving another change. run restore again, it picks up where it stopped (it won't start terminals twice)
 - **a claude came back with the wrong conversation**: it had no session file yet (just started, no message sent), so it ran `claude --continue`. the card shows `continues the folder's latest conversation` for those before you restore
 - **claude uses `CLAUDE_CONFIG_DIR`**: the session lookup reads `$HOME/.claude`. a custom config dir means no session id is found and you get the `--continue` fallback. patch `sessionOf` in `archive.js` if that's you

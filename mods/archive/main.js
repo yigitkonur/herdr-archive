@@ -7,8 +7,8 @@
 //   archive-tab-<id>    archive that tab                                     } and menus: they
 //   restore-<item id>   restore an item                                      } don't depend on
 //   move-<tab>-to-<space>  move a tab to another space, still running        } what's shown
-//   restore-all         restore everything in the shown Low priority space
-//   migrate             turn terminals parked in Low priority (old way) into items
+//   restore-all         restore everything in the shown archive space
+//   migrate             turn terminals parked in the archive space (old way) into items
 
 import { View, div } from "gpui-kit";
 import { focused, nextCommand, notify } from "herdr";
