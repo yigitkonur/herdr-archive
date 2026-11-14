@@ -9,7 +9,7 @@
 
 import { spaces, panes, terminals, machines, focused, run, exec, shared, setShared, readTextFile, writeTextFile, appHome } from "herdr";
 
-export const LOW_NAME = "Low priority";
+export const LOW_NAME = "archived";
 export const LOW_COLOR = "#6b7280";
 
 const machineOf = (id) => (id.includes("/") ? id.split("/")[0] : null);

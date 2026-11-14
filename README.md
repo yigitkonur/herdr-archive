@@ -8,7 +8,7 @@ no more 40 claude processes sitting in memory "just in case". no more tab gravey
 
 | you press | what happens |
 |---|---|
-| `cmd+s` on a project | every terminal in it gets recorded, then the whole space closes. it shows up as an item under a gray **low priority** space. nothing runs in there |
+| `cmd+s` on a project | every terminal in it gets recorded, then the whole space closes. it shows up as a tab in a gray space called **archived** (one per machine, made on first use). nothing runs in there. the sidebar shows it as one row, the tab names tell you what's inside |
 | `cmd+d` on a tab | same thing but just that one tab. the rest of the space stays put |
 | `cmd+s` / `cmd+d` on an archived item | restores it |
 | click an archived item | opens a little card: what's in it, which folders, which claude conversations. big restore button |
@@ -58,7 +58,7 @@ it:
 backups of anything it touches go to `<home>/.archive-backup/<timestamp>/`. run it twice, nothing breaks. `./install.sh --no-keys` skips the key binding.
 
 ```sh
-./install.sh uninstall       # removes the mods, the keys, the layout block (items already in low priority stay until you restore/close them)
+./install.sh uninstall       # removes the mods, the keys, the layout block (items already in the archive space stay until you restore/close them)
 ```
 
 ## commands
@@ -72,8 +72,8 @@ all of these are `archive.<command>`, so `"cmd-s": "archive.toggle-space"` in ke
 | `archive-space-<space id>` | archive that space. ids from `herdr-app ls` |
 | `archive-tab-<tab id>` | archive that tab |
 | `restore-<item id>` | restore an item (ids look like `ar1a2b3c…`, they're in shared state `archive.items`) |
-| `restore-all` | restore everything in the shown low priority space |
-| `migrate` | if you have terminals parked in low priority from the old "move it there and leave it running" way, turn them into proper items (**ends those terminals**, so only when you mean it) |
+| `restore-all` | restore everything in the shown archived space |
+| `migrate` | if you have terminals parked in the archive space from the old "move it there and leave it running" way, turn them into proper items (**ends those terminals**, so only when you mean it) |
 | `move-<tab id>-to-<space id>` | bonus: move a running tab to another space on the same machine, no restart |
 
 the by-id ones don't care what's focused. use those in scripts, not the toggles. (the toggles act on whatever you're looking at, which is the point of a shortcut and the reason not to fire them from a test script at your real work. ask me how i know.)
@@ -88,7 +88,7 @@ archive:
 1. `hc get <t>` for each terminal → folder, foreground argv, pid
 2. claude? read `~/.claude/sessions/<pid>.json` on that machine → session id, check `~/.claude/projects/*/<id>.jsonl` exists
 3. write the record to shared state (`archive.items`) and the log
-4. make the machine's low priority space if it isn't there (a placeholder terminal labelled into it, killed right after) and add a tab whose only pane is the `archived` mod
+4. make the machine's `archived` space if it isn't there (a placeholder terminal labelled into it, killed right after) and add a tab whose only pane is the `archived` mod
 5. only now close the space/tab. if anything failed before that, the item is undone and nothing is closed. once the close is sent, the item stays no matter what (a slow remote can land the close late)
 
 restore:
@@ -99,7 +99,7 @@ restore:
 
 moves are serialized with a lock in shared state (`archive.lock`, expires after 60s so a crashed app doesn't wedge it). closing an item's tab forgets it.
 
-shared state keys other mods can read: `archive.items`, `archive.lock`, `lowspace.ids` (each machine's low priority space id). if you also use a mod that stores `space.colors`, the project's color is saved and restored too.
+shared state keys other mods can read: `archive.items`, `archive.lock`, `lowspace.ids` (each machine's archive space id; rename the space to whatever you like, it's found by id). if you also use a mod that stores `space.colors`, the project's color is saved and restored too.
 
 ## files
 
@@ -122,7 +122,7 @@ install.sh                install / uninstall
 
 ## the author's setup
 
-this came out of a fully customized herdr. there the sidebar lists archived items under the low priority space (it just reads the shared `archive.items` / `lowspace.ids` keys described above) and the tab right-click menu has archive / restore items. both are tiny: draw rows from shared state, call `archive.<command>` on click.
+this came out of a fully customized herdr. there the archive space is a single gray row in the sidebar (it just reads the shared `lowspace.ids` key described above) and the tab right-click menu has archive / restore items. both are tiny: draw rows from shared state, call `archive.<command>` on click.
 
 ## license
 
